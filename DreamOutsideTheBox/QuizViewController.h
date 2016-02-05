@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
+#import "CreateQuizViewController.h"
 
-@interface QuizViewController : UIViewController
+@interface QuizViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+- (IBAction)didTouchCloseButton:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UITableView *quizTableView;
+@property (weak, nonatomic) IBOutlet UIButton *createQuizButton;
+
+- (IBAction)didTouchCreateQuizButton:(id)sender;
 
 @end

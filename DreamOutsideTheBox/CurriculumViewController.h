@@ -8,7 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "StandardTableViewCell.h"
 
-@interface CurriculumViewController : UIViewController
+@interface CurriculumViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *curTableView;
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet UIButton *closeButton;
+
+
+- (IBAction)didTouchCloseButton:(id)sender;
 
 @end

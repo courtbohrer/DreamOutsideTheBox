@@ -8,15 +8,34 @@
 
 #import "QuizViewController.h"
 
-@interface QuizViewController ()
+@interface QuizViewController (){
+    NSMutableArray *quizNames;
+}
 
 @end
 
 @implementation QuizViewController
 
+@synthesize quizTableView;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    quizTableView.delegate=self;
+    quizTableView.dataSource=self;
+    
+    quizNames = [[NSMutableArray alloc] init];
+    PFQuery *query = [PFQuery queryWithClassName:@"Quiz"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            for (PFObject *object in objects) {
+                [quizNames addObject:[object valueForKey:@"Name"]];
+            }
+            [quizTableView reloadData];
+        } else {
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +43,53 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+// table delegate methods
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
-*/
 
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    return [quizNames count];
+}
+
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *MyIdentifier = @"MyIdentifier";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+    
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier];
+    }
+    
+    cell.textLabel.text = [quizNames objectAtIndex:indexPath.row];
+    
+    return cell;
+}
+
+
+//TODO: implement
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    
+}
+
+
+
+- (IBAction)didTouchCloseButton:(id)sender {
+    [self dismissViewControllerAnimated:true completion:nil];
+}
+- (IBAction)didTouchCreateQuizButton:(id)sender {
+    CreateQuizViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"CreateQuizVC"];
+    [self presentModalViewController:controller animated:YES];
+}
 @end

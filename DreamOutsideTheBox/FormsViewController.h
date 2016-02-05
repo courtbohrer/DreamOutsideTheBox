@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "StandardTableViewCell.h"
 
-@interface FormsViewController : UIViewController
+@interface FormsViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *formsTableView;
 
 @end

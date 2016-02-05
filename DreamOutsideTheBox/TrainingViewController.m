@@ -22,10 +22,12 @@
     
 }
 
--(void) viewDidAppear:(BOOL)animated{
+-(void) viewWillAppear:(BOOL)animated{
     if (![PFUser currentUser]) {
         topLabel.text = @"Welcome! Please login to view the rest of our content!";
-    } else if (![[PFUser currentUser] valueForKey:@"verified"]) {
+    } else if ([[PFUser currentUser] valueForKey:@"verified"] == false) {
+        PFObject *ver = [PFUser currentUser];
+        NSLog(@"ver is %@", ver);
         NSString *name = [[PFUser currentUser] valueForKey:@"username"];
         topLabel.text = [NSString stringWithFormat:@"Hi there %@! \nWelcome to our app and thank you for volunteering your time. \nFor the security of our Dreamers, you need to complete one of our training quizzes before you can access the rest of our content.", name];
         [[[[self.tabBarController tabBar]items]objectAtIndex:1]setEnabled:FALSE];
@@ -34,6 +36,9 @@
     } else {
         NSString *name = [[PFUser currentUser] valueForKey:@"username"];
         topLabel.text = [NSString stringWithFormat:@"Welcome back %@!", name];
+        [[[[self.tabBarController tabBar]items]objectAtIndex:1]setEnabled:TRUE];
+        [[[[self.tabBarController tabBar]items]objectAtIndex:2]setEnabled:TRUE];
+        [[[[self.tabBarController tabBar]items]objectAtIndex:3]setEnabled:TRUE];
     }
 }
 

@@ -22,16 +22,21 @@
 }
 
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     if([PFUser currentUser]){
         [loginButton setTitle:@"Log out" forState:UIControlStateNormal];
         if (![[PFUser currentUser] valueForKey:@"verified"]) {
             [[[[self.tabBarController tabBar]items]objectAtIndex:1]setEnabled:FALSE];
             [[[[self.tabBarController tabBar]items]objectAtIndex:2]setEnabled:FALSE];
             [[[[self.tabBarController tabBar]items]objectAtIndex:3]setEnabled:FALSE];
+        } else {
+            [[[[self.tabBarController tabBar]items]objectAtIndex:1]setEnabled:TRUE];
+            [[[[self.tabBarController tabBar]items]objectAtIndex:2]setEnabled:TRUE];
+            [[[[self.tabBarController tabBar]items]objectAtIndex:3]setEnabled:TRUE];
         }
     } else {
         [loginButton setTitle:@"Log in" forState:UIControlStateNormal];
+        //[[[[self.tabBarController tabBar]items]objectAtIndex:0]setEnabled:FALSE];
         [[[[self.tabBarController tabBar]items]objectAtIndex:1]setEnabled:FALSE];
         [[[[self.tabBarController tabBar]items]objectAtIndex:2]setEnabled:FALSE];
         [[[[self.tabBarController tabBar]items]objectAtIndex:3]setEnabled:FALSE];
@@ -52,6 +57,9 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Bye!" message:@"We have logged you out." delegate:self cancelButtonTitle:@"Bye!" otherButtonTitles:nil];
         [alert show];
         [loginButton setTitle:@"Log in" forState:UIControlStateNormal];
+        [[[[self.tabBarController tabBar]items]objectAtIndex:1]setEnabled:FALSE];
+        [[[[self.tabBarController tabBar]items]objectAtIndex:2]setEnabled:FALSE];
+        [[[[self.tabBarController tabBar]items]objectAtIndex:3]setEnabled:FALSE];
     } else {
         //no current PFUser, need to login
         LoginViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginVC"];
